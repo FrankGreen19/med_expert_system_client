@@ -4,9 +4,7 @@
       <v-toolbar-title style="color: #1976d2">*Лого*</v-toolbar-title>
       <v-spacer />
       <v-btn @click="openMedTestTypesSelector" class="mr-2" rounded color="orange">Пройти тест</v-btn>
-      <v-btn rounded color="primary">
-        <router-link to="/login"><span style="color: white">Войти</span></router-link>
-      </v-btn>
+      <UserButton />
     </v-app-bar>
     <MedicalTestTypeSelector ref="medicalTestTypeSelector"/>
   </v-container>
@@ -14,6 +12,7 @@
 
 <script>
 import MedicalTestTypeSelector from "@/components/medical_test/MedicalTestTypeSelector"
+import UserButton from "@/components/user/UserButton";
 
 export default {
   name: 'NavBar',
@@ -24,14 +23,15 @@ export default {
 
   components: {
     MedicalTestTypeSelector,
+    UserButton,
   },
 
   methods: {
     openMedTestTypesSelector()
     {
       this.$refs.medicalTestTypeSelector.showDialog()
-    }
-  }
+    },
+  },
 
 }
 </script>

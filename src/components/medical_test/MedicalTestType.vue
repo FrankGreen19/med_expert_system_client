@@ -1,12 +1,12 @@
 <template>
-  <v-col cols="4">
+  <v-col cols="4" sm="12" md="4">
     <v-card height="235" class="d-flex flex-column">
       <v-card-title class="justify-center mb-2">{{testType.title}}</v-card-title>
       <v-card-subtitle class="text-center">{{ testType.explanation }}</v-card-subtitle>
       <v-spacer />
       <v-divider />
       <v-card-actions>
-        <v-btn class="mx-auto" rounded outlined color="orange">Пройти</v-btn>
+        <v-btn class="mx-auto" rounded dark color="orange">Пройти</v-btn>
       </v-card-actions>
     </v-card>
   </v-col>

@@ -19,7 +19,7 @@ export default {
     actions: {
         fetchMedicalTestTypes(context)
         {
-            axios.get('http://localhost:8000/medical-test-type')
+            axios.get(process.env.VUE_APP_API_URL + "/medical-test-type")
                 .then(response => context.commit("setMedTestTypes", response.data))
         }
     }, // функции, работающие с апи

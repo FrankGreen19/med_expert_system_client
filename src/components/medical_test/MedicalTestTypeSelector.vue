@@ -5,7 +5,11 @@
         <v-dialog transition="dialog-top-transition" v-model="testTypeDialog" max-width="600">
           <template v-slot:default="dialog">
             <v-card>
-              <v-toolbar color="primary" dark>
+              <v-toolbar
+                  color="primary"
+                  dark
+                  src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg"
+              >
                 Выберете тип теста
                 <v-spacer />
                 <v-btn text @click="dialog.value = false">
@@ -38,12 +42,6 @@ export default {
   data: () => ({
     testTypeDialog: false,
   }),
-
-  props: {
-    comp: {
-
-    }
-  },
 
   components: {
     MedicalTestType
