@@ -5,6 +5,7 @@ export default {
         user: null,
         isAuth: false,
         loginLoading: false,
+        loginDialogVisible: false,
     }, //данные
     mutations: {
         setUser(state, payload) {
@@ -17,6 +18,14 @@ export default {
 
         setLoginLoading(state, payload) {
             state.loginLoading = payload
+        },
+
+        showLoginDialog(state) {
+            state.loginDialogVisible = true
+        },
+
+        hideLoginDialog(state) {
+            state.loginDialogVisible = false
         },
     }, // функции, меняющие состояние
     getters: {
@@ -31,6 +40,10 @@ export default {
         isLoginLoading(state) {
             return state.loginLoading
         },
+
+        isLoginDialogVisible(state) {
+            return state.loginDialogVisible
+        }
     }, // аналоги computed свойств
     actions: {
         login(context, {username, password}) {
@@ -46,7 +59,10 @@ export default {
 
                 axios.post(process.env.VUE_APP_API_URL + '/user/email', {
                     'email': username
-                }).then(response => context.commit('setUser', response.data))
+                }).then((response) => {
+                    context.commit('setUser', response.data)
+                    context.commit('hideLoginDialog')
+                })
             }).catch((e) => {
                 console.log(e)
             }).finally(() => {

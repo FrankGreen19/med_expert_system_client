@@ -1,6 +1,11 @@
 <template>
-  <v-dialog transition="dialog-top-transition" v-model="loginDialogVisible" max-width="600">
-    <template v-slot:default="dialog">
+  <v-dialog
+      transition="dialog-top-transition"
+      v-model="isLoginDialogVisible"
+      max-width="600"
+      @click:outside="hideDialog"
+  >
+    <template>
       <v-card rounded>
         <v-toolbar
             dark
@@ -8,7 +13,7 @@
         >
           Аутентификация
           <v-spacer/>
-          <v-btn text @click="dialog.value = false">
+          <v-btn text @click="hideDialog">
             <v-icon dark center>mdi-minus-circle</v-icon>
           </v-btn>
         </v-toolbar>
@@ -52,7 +57,7 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import {mapGetters, mapMutations} from "vuex";
 
 export default {
   name: "LogIn",
@@ -60,18 +65,13 @@ export default {
   data: () => ({
     email: '',
     password: '',
-    loginDialogVisible: false,
-    loading: false,
   }),
 
   methods: {
-    showDialog() {
-      this.loginDialogVisible = true
+    hideDialog() {
+      this.hideLoginDialog
     },
     login() {
-      this.loading = true
-      console.log(this.loading)
-
       this.$store.dispatch('login', {
         'username': this.email,
         'password': this.password,
@@ -84,7 +84,8 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["isLoginLoading"]),
+    ...mapGetters(["isLoginLoading", "isLoginDialogVisible"]),
+    ...mapMutations(["hideLoginDialog"])
   }
 }
 </script>

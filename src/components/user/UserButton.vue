@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="!isAuth">
-      <v-btn @click="openLoginDialog" rounded color="primary">
+      <v-btn @click="showDialog" rounded color="primary">
         <span style="color: white">Войти</span>
       </v-btn>
     </div>
@@ -40,12 +40,12 @@
         </v-list-item>
       </v-list>
     </v-menu>
-    <LogInDialog ref="logInDialog"/>
+    <LogInDialog />
   </div>
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import {mapGetters, mapMutations} from "vuex";
 import LogInDialog from "@/components/user/LogInDialog";
 
 export default {
@@ -60,13 +60,13 @@ export default {
   },
 
   methods: {
-    openLoginDialog()
-    {
-      this.$refs.logInDialog.showDialog()
+    showDialog() {
+      this.showLoginDialog
     }
   },
 
   computed: {
+    ...mapMutations(["showLoginDialog"]),
     ...mapGetters(["user", "isAuth"]),
 
     username: function ()
