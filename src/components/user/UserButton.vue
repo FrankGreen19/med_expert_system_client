@@ -28,11 +28,13 @@
         >
           <v-list-item-title>Профиль</v-list-item-title>
         </v-list-item>
+
         <v-list-item
             @click="() => {}"
         >
-          <v-list-item-title>Тесты</v-list-item-title>
+          <v-list-item-title><router-link to="/medical-tests">Тесты</router-link></v-list-item-title>
         </v-list-item>
+
         <v-list-item
             @click="() => {}"
         >

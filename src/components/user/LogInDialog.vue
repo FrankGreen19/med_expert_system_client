@@ -20,6 +20,11 @@
         <v-container>
           <v-row>
             <v-col cols="8" class="mx-auto">
+              <v-card v-if="getError" class="text-center" color="red">
+                <v-card-text style="color: white">
+                  {{ getError }}
+                </v-card-text>
+              </v-card>
               <v-form class="text-center">
                 <v-text-field
                     solo
@@ -44,7 +49,8 @@
                   <v-progress-circular
                       v-else
                       indeterminate
-                      color="primary"
+                      color="white"
+                      class="ma-2"
                   ></v-progress-circular>
                 </v-btn>
               </v-form>
@@ -75,16 +81,14 @@ export default {
       this.$store.dispatch('login', {
         'username': this.email,
         'password': this.password,
-      }).catch(() => {
-
-      }).finally(() => {
-
+      }).catch((error) => {
+        console.log(error)
       })
     }
   },
 
   computed: {
-    ...mapGetters(["isLoginLoading", "isLoginDialogVisible"]),
+    ...mapGetters(["isLoginLoading", "isLoginDialogVisible", "getError"]),
     ...mapMutations(["hideLoginDialog"])
   }
 }

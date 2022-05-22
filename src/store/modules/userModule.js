@@ -6,6 +6,7 @@ export default {
         isAuth: false,
         loginLoading: false,
         loginDialogVisible: false,
+        error: '',
     }, //данные
     mutations: {
         setUser(state, payload) {
@@ -27,6 +28,11 @@ export default {
         hideLoginDialog(state) {
             state.loginDialogVisible = false
         },
+
+        setError(state, payload) {
+            state.error = payload
+        },
+
     }, // функции, меняющие состояние
     getters: {
         user(state) {
@@ -43,6 +49,10 @@ export default {
 
         isLoginDialogVisible(state) {
             return state.loginDialogVisible
+        },
+
+        getError(state) {
+            return state.error
         }
     }, // аналоги computed свойств
     actions: {
@@ -62,10 +72,19 @@ export default {
                 }).then((response) => {
                     context.commit('setUser', response.data)
                     context.commit('hideLoginDialog')
+                }).finally(() => {
+                    context.commit('setLoginLoading', false)
                 })
-            }).catch((e) => {
-                console.log(e)
-            }).finally(() => {
+            }).catch((error) => {
+                let errorMessage = ''
+                if (error.response.status === 401) {
+                    errorMessage = 'Неверный логин или пароль'
+                } else {
+                    errorMessage = 'Непредвиденная ошибка. Пожалуйста, попробуйте позже'
+                }
+
+                context.commit('setError', errorMessage)
+
                 context.commit('setLoginLoading', false)
             })
         }
