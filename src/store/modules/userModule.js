@@ -1,4 +1,5 @@
 import axios from 'axios'
+import router from '../../router'
 
 export default {
     state: {
@@ -84,9 +85,21 @@ export default {
                 }
 
                 context.commit('setError', errorMessage)
-
                 context.commit('setLoginLoading', false)
             })
+        },
+
+        registration(context, {form}) {
+            context.commit('setLoginLoading', true)
+
+            axios.post(process.env.VUE_APP_API_URL + '/registration', {...form})
+                .then((response) => {
+                    context.commit('setUser', response.data)
+                    context.commit('setIsAuth', true)
+                    context.commit('setLoginLoading', false)
+
+                    router.push('/')
+                })
         }
     }, // функции, работающие с апи
 }

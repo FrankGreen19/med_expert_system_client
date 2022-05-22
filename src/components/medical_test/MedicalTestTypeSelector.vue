@@ -2,7 +2,11 @@
   <v-container>
     <v-row justify="space-around">
       <v-col cols="auto">
-        <v-dialog transition="dialog-top-transition" v-model="testTypeDialog" max-width="600">
+        <v-dialog
+            transition="dialog-top-transition"
+            v-model="testTypeDialog"
+            max-width="600"
+        >
           <template v-slot:default="dialog">
             <v-card>
               <v-toolbar

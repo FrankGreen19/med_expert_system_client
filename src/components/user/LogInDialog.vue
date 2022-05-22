@@ -53,6 +53,8 @@
                       class="ma-2"
                   ></v-progress-circular>
                 </v-btn>
+                <br>
+                <router-link to="/registration">Еще не зарегистрированы?</router-link>
               </v-form>
             </v-col>
           </v-row>
@@ -76,13 +78,12 @@ export default {
   methods: {
     hideDialog() {
       this.hideLoginDialog
+      this.$store.commit('setError', '')
     },
     login() {
       this.$store.dispatch('login', {
         'username': this.email,
         'password': this.password,
-      }).catch((error) => {
-        console.log(error)
       })
     }
   },

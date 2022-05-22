@@ -33,7 +33,7 @@ export default {
 
       this.$emit('addMedicalTest', medTest) // прокидывание нового объекта в родительский компонент
     }
-  }
+  },
 }
 </script>
 
