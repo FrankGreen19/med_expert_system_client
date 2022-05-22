@@ -3,7 +3,7 @@
     <MedicalTestForm @addMedicalTest="addMedicalTest"/>
     <v-row>
       <MedicalTest
-          v-for="medicalTest in medicalTests"
+          v-for="medicalTest in $store.getters.getMedTests"
           v-bind:medical-test="medicalTest"
           :key="medicalTest.id"
       />
@@ -24,19 +24,13 @@ export default {
   },
 
   data: () => ({
-    medicalTests: []
   }),
 
   mounted() {
-    this.fetchMedicalTests()
+    this.$store.dispatch('fetchMedTests')
   },
 
   methods: {
-    fetchMedicalTests()
-    {
-      this.axios.get('http://localhost:8000/medical-test').then(response => this.medicalTests = response.data)
-    },
-
     addMedicalTest (medTest)
     {
       this.medicalTests.push(medTest)
