@@ -20,7 +20,7 @@
         <v-container>
           <v-row>
             <v-col cols="8" class="mx-auto">
-              <v-card v-if="getError" class="text-center" color="red">
+              <v-card v-if="getError" class="text-center" color="orange">
                 <v-card-text style="color: white">
                   {{ getError }}
                 </v-card-text>
