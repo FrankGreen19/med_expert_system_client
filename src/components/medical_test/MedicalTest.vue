@@ -3,18 +3,17 @@
     <v-card elevation="5">
       <v-card-title>Тест №{{ medicalTest.id }}</v-card-title>
       <v-card-subtitle>{{ medicalTest.testType.title }}</v-card-subtitle>
-      <v-card-text>{{ testStatus }}</v-card-text>
+      <v-card-text>{{ medicalTest.asyncJobStatus }}</v-card-text>
       <v-card-actions>
         <v-btn @click="showInfoDialog" rounded outlined small color="orange">Подробнее</v-btn>
       </v-card-actions>
-      <MedicalTestInfo ref="medicalTestInfo" :medical-test="medicalTest" :test-status="testStatus"/>
+      <MedicalTestInfo ref="medicalTestInfo" :medical-test="medicalTest"/>
     </v-card>
   </v-col>
 </template>
 
 <script>
 import MedicalTestInfo from "@/components/medical_test/MedicalTestInfo";
-import medTestStatusesLang from "@/service/medTestStatusesLang";
 
 export default {
   name: "MedicalTest",
@@ -37,9 +36,6 @@ export default {
   },
 
   computed: {
-    testStatus: function() {
-      return medTestStatusesLang.get(this.medicalTest.asyncJob.status)
-    }
   }
 }
 </script>

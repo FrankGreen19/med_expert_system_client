@@ -23,24 +23,28 @@
               <v-col cols="12">
                 <v-card style="border-color: #ff9800">
                   <v-card-title>
-                    Результат: {{ testStatus }}
+                    Результат: {{ medicalTest.asyncJobStatus }}
                   </v-card-title>
                   <v-card-text>
-                    <div v-if="fuzzyResults.size > 0">
-                      Анализ симптомов:
-                      <v-list-item two-line v-for="fuzzyResult of fuzzyResults" v-bind:key="fuzzyResult[0]">
-                        <v-list-item-title>{{ fuzzyResult[0] }}</v-list-item-title>
+                    <div v-if="medicalTest.fuzzyResults.size > 0">
+                      Вероятности наличия заболеваний:
+                      <v-list-item two-line v-for="fuzzyResult of medicalTest.fuzzyResults"
+                                   v-bind:key="fuzzyResult.illnessTitle"
+                      >
+                        <v-list-item-title>{{ fuzzyResult.illnessTitle }}</v-list-item-title>
                         <v-list-item-subtitle>
-                          <v-icon color="primary">{{ fuzzyResult[1] }}</v-icon>
+                          <v-icon color="primary">{{ fuzzyResult.probability }}</v-icon>
                         </v-list-item-subtitle>
                       </v-list-item>
                     </div>
-                    <div v-if="cnnResults.size > 0">
+                    <div v-if="medicalTest.cnnResults.size > 0">
                       Анализ изображения:
-                      <v-list-item two-line v-for="cnnResult of cnnResults" v-bind:key="cnnResult[0]">
-                        <v-list-item-title>{{ cnnResult[0] }}</v-list-item-title>
+                      <v-list-item two-line v-for="cnnResult of medicalTest.cnnResults"
+                                   v-bind:key="cnnResult.illnessTitle"
+                      >
+                        <v-list-item-title>{{ cnnResult.illnessTitle }}</v-list-item-title>
                         <v-list-item-subtitle>
-                          <v-icon color="primary">{{ cnnResult[1] }}</v-icon>
+                          <v-icon color="primary">{{ cnnResult.illnessSubclassTitle }}</v-icon>
                         </v-list-item-subtitle>
                       </v-list-item>
                     </div>
@@ -52,16 +56,18 @@
               <v-col>
                 <v-card>
                   <v-card-text>
-                    <v-list-item two-line v-for="symptom of symptoms" v-bind:key="symptom.key">
-                      <v-list-item-title>{{ symptom[0] }}</v-list-item-title>
-                      <v-list-item-subtitle v-if="symptom[1] === 'true'">
-                        <v-icon color="primary">mdi-checkbox-marked-circle</v-icon>
+                    <v-list-item two-line v-for="medicalTestSymptom of medicalTest.symptoms"
+                                 v-bind:key="medicalTestSymptom.id"
+                    >
+                      <v-list-item-title>{{ medicalTestSymptom.symptom.title }}</v-list-item-title>
+                      <v-list-item-subtitle v-if="medicalTestSymptom.value === 'true'">
+                        <v-icon color="orange">mdi-checkbox-marked-circle</v-icon>
                       </v-list-item-subtitle>
-                      <v-list-item-subtitle v-else-if="symptom[1] === 'false'">
-                        <v-icon color="primary">mdi-minus-circle</v-icon>
+                      <v-list-item-subtitle v-else-if="medicalTestSymptom.value === 'false'">
+                        <v-icon color="orange">mdi-minus-circle</v-icon>
                       </v-list-item-subtitle>
                       <v-list-item-subtitle v-else>
-                        <v-icon color="primary">{{ symptom[1] }}</v-icon>
+                        <v-icon color="primary">{{ medicalTestSymptom.value }}</v-icon>
                       </v-list-item-subtitle>
                     </v-list-item>
                   </v-card-text>
@@ -92,13 +98,10 @@
           </v-container>
         </v-card>
       </template>
-      {{ cnnResults }}
     </v-dialog>
 </template>
 
 <script>
-import fuzzyNamesLang from "@/service/fuzzyNamesLang";
-import cnnLang from "@/service/cnnLang";
 
 export default {
   name: "MedicalTestInfo",
@@ -112,10 +115,6 @@ export default {
       type: Object,
       required: true
     },
-    testStatus: {
-      type: String,
-      required: true
-    }
   },
 
   methods: {
@@ -132,42 +131,6 @@ export default {
     fileUrl() {
       return 'http://localhost:8000/download/image?imageName=' + this.medicalTest.xrayImage.imageName
     },
-
-    symptoms() {
-      let symptoms = new Map()
-      const storeSymptoms = this.$store.getters.getSymptoms
-
-      for (let symptom of Object.entries(this.medicalTest.context.symptoms)) {
-        let storedSymptom = storeSymptoms.get(symptom[0])
-        if (storedSymptom) {
-          symptoms.set(storedSymptom, symptom[1])
-        }
-      }
-
-      return symptoms
-    },
-
-    fuzzyResults() {
-      let results = new Map()
-      let parsedResult =  Object.entries(JSON.parse(this.medicalTest.fuzzyResult))
-
-      for (let result of parsedResult) {
-        results.set(fuzzyNamesLang.get(result[0]), Number(result[1]).toFixed(2) + '%')
-      }
-
-      return results
-    },
-
-    cnnResults() {
-      let results = new Map()
-      let parsedResult =  Object.entries(this.medicalTest.cnnResult)
-
-      for (let result of parsedResult) {
-        results.set(result[0], cnnLang.get(result[1]))
-      }
-
-      return results
-    }
   }
 }
 </script>
