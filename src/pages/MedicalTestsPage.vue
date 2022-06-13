@@ -1,40 +1,44 @@
 <template>
   <v-container>
-    <MedicalTestForm @addMedicalTest="addMedicalTest"/>
-    <v-row>
+    <v-row v-if="!isMedTestsLoading">
       <MedicalTest
-          v-for="medicalTest in $store.getters.getMedTests"
+          v-for="medicalTest in getMedTests"
           v-bind:medical-test="medicalTest"
           :key="medicalTest.id"
       />
+    </v-row>
+    <v-row v-else>
+      <v-progress-circular
+          class="mx-auto"
+          :size="90"
+          color="amber"
+          indeterminate
+      ></v-progress-circular>
     </v-row>
   </v-container>
 </template>
 
 <script>
 import MedicalTest from "@/components/medical_test/MedicalTest";
-import MedicalTestForm from "@/components/medical_test/MedicalTestForm";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "MedicalTestsPage",
 
   components: {
     MedicalTest,
-    MedicalTestForm
-  },
-
-  data: () => ({
-  }),
-
-  mounted() {
-    this.$store.dispatch('fetchMedTests')
   },
 
   methods: {
-    addMedicalTest (medTest)
-    {
-      this.medicalTests.push(medTest)
-    },
+    ...mapActions(['fetchMedTests']),
+  },
+
+  mounted() {
+    this.fetchMedTests()
+  },
+
+  computed: {
+    ...mapGetters(['isMedTestsLoading', 'getMedTests'])
   }
 }
 </script>
