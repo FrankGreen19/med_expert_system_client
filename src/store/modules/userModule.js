@@ -73,6 +73,8 @@ export default {
                 }).then((response) => {
                     context.commit('setUser', response.data)
                     context.commit('hideLoginDialog')
+
+                    router.push('/')
                 }).finally(() => {
                     context.commit('setLoginLoading', false)
                 })
@@ -92,14 +94,20 @@ export default {
         registration(context, {form}) {
             context.commit('setLoginLoading', true)
 
-            axios.post(process.env.VUE_APP_API_URL + '/registration', {...form})
-                .then((response) => {
-                    context.commit('setUser', response.data)
-                    context.commit('setIsAuth', true)
-                    context.commit('setLoginLoading', false)
-
-                    router.push('/')
+            return axios.post(process.env.VUE_APP_API_URL + '/registration', {...form}).then(() => {
+                context.dispatch('login', {
+                    "username": form.email,
+                    "password": form.password
                 })
+            })
+        },
+
+        logout(context) {
+            axios.get(process.env.VUE_APP_API_URL + '/token/invalidate', {withCredentials: true}).then(() => {
+                localStorage.clear()
+                context.commit('setUser', null)
+                context.commit('setIsAuth', false)
+            })
         }
     }, // функции, работающие с апи
 }

@@ -63,7 +63,7 @@
                   v-model="form.birthDate"
               />
               <v-btn rounded dark color="orange" @click="register">
-                <span v-if="!isLoginLoading">Войти</span>
+                <span v-if="!isLoginLoading"><v-icon dark>mdi-checkbox-marked-circle</v-icon></span>
                 <v-progress-circular
                     v-else
                     indeterminate
@@ -100,9 +100,17 @@ export default {
 
   methods: {
     register() {
+      this.errors = []
       if (this.validate()) {
-        this.$store.dispatch('registration', {'form': this.form})
-        console.log('reg')
+        this.$store.dispatch('registration', {'form': this.form}).catch((error) => {
+
+          if (error.response.status === 409) {
+            this.errors.push('Пользователь с данным адресом электронной почты уже существует')
+
+          }
+          this.$store.commit('setLoginLoading', false)
+          console.log('sdasdas')
+        })
       }
     },
     validate() {

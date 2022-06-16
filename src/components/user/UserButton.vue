@@ -30,13 +30,13 @@
         </v-list-item>
 
         <v-list-item
-            @click="() => {}"
+            @click="() => {$router.push('/medical-tests')}"
         >
-          <v-list-item-title><router-link to="/medical-tests">Тесты</router-link></v-list-item-title>
+          <v-list-item-title>Тесты</v-list-item-title>
         </v-list-item>
 
         <v-list-item
-            @click="() => {}"
+            @click="$store.dispatch('logout')"
         >
           <v-list-item-title>Выход</v-list-item-title>
         </v-list-item>

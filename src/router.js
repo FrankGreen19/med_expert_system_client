@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import MainPage from "@/pages/MainPage";
 import RegistrationPage from "@/pages/RegistrationPage";
 import MedicalTestsPage from "@/pages/MedicalTestsPage";
+import NewMedicalTestPage from "@/pages/NewMedicalTestPage";
 
 Vue.use(VueRouter)
 
@@ -20,6 +21,13 @@ let router = new VueRouter({
         {
             path: '/medical-tests',
             component: MedicalTestsPage,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: '/medical-test/:id',
+            component: NewMedicalTestPage,
             meta: {
                 requiresAuth: true
             }

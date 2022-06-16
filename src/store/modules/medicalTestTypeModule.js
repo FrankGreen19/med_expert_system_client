@@ -21,12 +21,15 @@ export default {
 
         setTestTypesLoading(state) {
             state.testTypesLoading = state.testTypesLoading !== true;
-        }
-
+        },
     }, // функции, меняющие состояние
     getters: {
         getAllMedTestTypes(state) {
             return state.medTestTypes
+        },
+
+        getMedTestTypeByAlias: (state) => (searchingAlias) => {
+            return state.medTestTypes.find(medTestType => medTestType.alias === searchingAlias)
         },
 
         isTestTypeDialogVisible(state) {
@@ -35,7 +38,7 @@ export default {
 
         getTestTypesLoading(state) {
             return state.testTypesLoading
-        }
+        },
     }, // аналоги computed свойств
     actions: {
         fetchMedicalTestTypes(context) {
@@ -47,6 +50,11 @@ export default {
 
                     context.commit('setTestTypesLoading')
                 })
+        },
+
+        fetchMedicalTestTypeById(context, id) {
+            console.log('id', id)
+            return axios.get(process.env.VUE_APP_API_URL + '/medical-test-type/' + id)
         }
     }, // функции, работающие с апи
 }
