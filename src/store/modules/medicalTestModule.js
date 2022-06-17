@@ -35,6 +35,14 @@ export default {
                 context.commit('setMedTests', response.data)
                 context.commit('setMedTestsLoading')
             })
+        },
+
+        newMedicalTest(context, form) {
+            return axios.post(process.env.VUE_APP_API_URL + '/medical-test', form, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
         }
     }, // функции, работающие с апи
 }

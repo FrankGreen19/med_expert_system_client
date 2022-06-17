@@ -14,23 +14,25 @@
             <v-row>
               <v-col cols="6" class="mx-auto">
                 <v-card-text class="text-center">
-                  <v-form v-if="testData">
+                  <v-form v-if="testData" enctype="multipart/form-data">
                     <div v-for="symptom of symptoms" :key="symptom.id">
                       <v-switch v-if="symptom.inputType === 'switch'"
                                 color="primary"
                                 :label="symptom.title"
+                                v-model="form.symptoms[symptom.id]"
                       ></v-switch>
                       <v-text-field
                           v-else-if="symptom.inputType === 'text'"
                           :label="symptom.title"
-                          v-model="form[symptom.alias]"
+                          v-model="form.symptoms[symptom.id]"
                       />
                     </div>
                     <v-file-input
                         accept="image/*"
                         label="Загрузите снимок легких"
+                        v-model="xray"
                     ></v-file-input>
-                    <v-btn color="orange" dark class="mt-3">
+                    <v-btn color="orange" dark class="mt-3" @click="saveMedicalTest">
                       <v-icon dark>mdi-checkbox-marked-circle</v-icon>
                     </v-btn>
                   </v-form>
@@ -61,11 +63,15 @@ export default {
   data: () => ({
     testData: null,
     symptoms: [],
-    form: {},
+    form: {
+      alias: null,
+      symptoms: {},
+    },
+    xray: null,
   }),
 
   methods: {
-    ...mapActions(['fetchMedicalTestTypeById']),
+    ...mapActions(['fetchMedicalTestTypeById', 'newMedicalTest']),
 
     setTestData() {
       this.fetchMedicalTestTypeById(this.testTypeId).then((response) => {
@@ -73,12 +79,21 @@ export default {
         for (let illness of this.testData.illnesses) {
           for (let symptom of illness.symptoms) {
             this.symptoms.push(symptom)
+            this.form.symptoms[symptom.id] = symptom.defaultValue == 'false' ? false : symptom.defaultValue;
           }
         }
 
         console.log('data',this.testData)
       })
+    },
 
+    saveMedicalTest() {
+      this.form.alias = this.testData.alias
+
+      let formData = new FormData()
+      formData.append('xray', this.xray)
+      formData.append('testData', JSON.stringify(this.form))
+      this.newMedicalTest(formData)
     }
   },
 
